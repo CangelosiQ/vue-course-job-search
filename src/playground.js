@@ -17,12 +17,9 @@ console.log(developer.salary);
 developer.doubleSalary();
 console.log(developer.salary);
 
-export const evenOrOdd = (number) => {
-  if (number % 2 === 0) {
-    return "Even";
-  } else {
-    return "Odd";
-  }
-};
-export const multiply = (num1, num2) => num1 * num2;
-export const divide = (num1, num2) => num1 * num2;
+
+const numbers = [1, 2, 3, 4, 5];
+const squares = numbers.map((number) => {
+  return number * number;
+});
+console.log(squares);
