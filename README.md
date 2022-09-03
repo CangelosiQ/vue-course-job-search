@@ -22,6 +22,7 @@ npm run build
 
 ```
 npm run test:unit
+npm run test:watch
 ```
 
 ### Lints and fixes files

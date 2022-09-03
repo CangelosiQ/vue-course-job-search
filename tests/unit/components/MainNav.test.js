@@ -26,30 +26,22 @@ describe("MainNav", () => {
 
   describe("when user is logged out", () => {
     it("prompts user to sign in", () => {
-      const wrapper = mount(MainNav, {
-        data() {
-          return {
-            isLoggedIn: false,
-          };
-        },
-      });
-      const loginButton = wrapper.findComponent({ name: "ActionButton" });
-      const profileImage = wrapper.findComponent({ name: "ProfileImage" });
+      const wrapper = mount(MainNav);
+      const loginButton = wrapper.find("[data-test='login-button']");
       expect(loginButton.exists()).toBe(true);
-      expect(profileImage.exists()).toBe(false);
     });
   });
   describe("when user is logged in", () => {
-    it("display user profile picture", () => {
-      const wrapper = mount(MainNav, {
-        data() {
-          return {
-            isLoggedIn: true,
-          };
-        },
-      });
-      const loginButton = wrapper.findComponent({ name: "ActionButton" });
-      const profileImage = wrapper.findComponent({ name: "ProfileImage" });
+    it("display user profile picture", async () => {
+      const wrapper = mount(MainNav);
+      let profileImage = wrapper.find("[data-test='profile-image']");
+      let loginButton = wrapper.find("[data-test='login-button']");
+
+      expect(profileImage.exists()).toBe(false);
+      await loginButton.trigger("click");
+      profileImage = wrapper.find("[data-test='profile-image']");
+      loginButton = wrapper.find("[data-test='login-button']");
+
       expect(loginButton.exists()).toBe(false);
       expect(profileImage.exists()).toBe(true);
     });
