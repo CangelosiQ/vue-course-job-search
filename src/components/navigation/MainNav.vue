@@ -4,20 +4,22 @@
       <div
         class="flex flex-nowrap h-full px-8 mx-auto border-b border-solid border-brand-gray-1"
       >
-        <a :href="url" class="flex items-center h-full text-xl">{{
-          company
-        }}</a>
+        <router-link to="/" class="flex items-center h-full text-xl"
+          >ZRO Careers
+        </router-link>
         <nav class="h-full ml-12">
           <ul class="flex h-full p-0 m-0 list-none">
             <li
               v-for="menuItem in menuItems"
-              :key="menuItem"
+              :key="menuItem.text"
               class="h-full ml-9 first:ml-0"
               data-test="main-nav-list-items"
             >
-              <a href="" class="flex items-center h-full py-2.5">{{
-                menuItem
-              }}</a>
+              <router-link
+                class="flex items-center h-full py-2.5"
+                :to="{ name: menuItem.url }"
+                >{{ menuItem.text }}</router-link
+              >
             </li>
           </ul>
         </nav>
@@ -53,15 +55,13 @@ export default {
   },
   data() {
     return {
-      company: "ZRO Careers",
-      url: "https://careers.google.com",
       menuItems: [
-        "Teams",
-        "Location",
-        "Life at ZRO Corp",
-        "How we hire",
-        "Students",
-        "Jobs",
+        { text: "Teams", url: "home" },
+        { text: "Location", url: "home" },
+        { text: "Life at ZRO Corp", url: "home" },
+        { text: "How we hire", url: "home" },
+        { text: "Students", url: "home" },
+        { text: "Jobs", url: "jobs" },
       ],
       isLoggedIn: false,
     };
