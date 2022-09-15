@@ -13,7 +13,7 @@
               v-for="menuItem in menuItems"
               :key="menuItem.text"
               class="h-full ml-9 first:ml-0"
-              data-test="main-nav-list-items"
+              data-test="main-nav-list-item"
             >
               <router-link
                 class="flex items-center h-full py-2.5"
@@ -30,7 +30,7 @@
             data-test="login-button"
             type="primary"
             text="Sign In"
-            @click="logInUser"
+            @click="LOGIN_USER()"
           />
         </div>
       </div>
@@ -42,9 +42,11 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
 import ActionButton from "@/components/shared/ActionButton.vue";
 import ProfileImage from "@/components/navigation/ProfileImage.vue";
 import Subnav from "@/components/navigation/Subnav.vue";
+import { LOGIN_USER } from "@/store";
 
 export default {
   name: "MainNav",
@@ -63,7 +65,6 @@ export default {
         { text: "Students", url: "home" },
         { text: "Jobs", url: "jobs" },
       ],
-      isLoggedIn: false,
     };
   },
   computed: {
@@ -73,11 +74,10 @@ export default {
         "h-32": this.isLoggedIn,
       };
     },
+    ...mapState(["isLoggedIn"]),
   },
   methods: {
-    logInUser() {
-      this.isLoggedIn = true;
-    },
+    ...mapMutations([LOGIN_USER]),
   },
 };
 </script>
