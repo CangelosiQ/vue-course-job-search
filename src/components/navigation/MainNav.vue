@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       menuItems: [
-        { text: "Teams", url: "home" },
+        { text: "Teams", url: "teams" },
         { text: "Location", url: "home" },
         { text: "Life at ZRO Corp", url: "home" },
         { text: "How we hire", url: "home" },
