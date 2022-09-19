@@ -11,13 +11,27 @@
       </div>
       <accordion header="Degree" />
       <accordion header="Job Types">Not yet implemented.</accordion>
-      <accordion header="Organizations">
+      <accordion header="Organizations" data-test="accordion-organizations">
         <div class="mt-5">
           <fieldset>
             <ul class="flex flex-row flex-wrap">
-              <li class="w-1/2 h-8">
-                <input id="VueTube" type="checkbox" class="m-3" />
-                <label for="VueTube">VueTube</label>
+              <li
+                v-for="organization in UNIQUE_ORGANIZATIONS"
+                :key="organization"
+                class="w-1/2 h-8"
+              >
+                <input
+                  :id="organization"
+                  v-model="selectedOrganizations"
+                  :value="organization"
+                  type="checkbox"
+                  class="m-3"
+                  :data-test="organization"
+                  @change="selectOrganizations"
+                />
+                <label :for="organization" data-test="organization">{{
+                  organization
+                }}</label>
               </li>
             </ul>
           </fieldset>
@@ -28,10 +42,26 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from "vuex";
 import ActionButton from "@/components/shared/ActionButton.vue";
 import Accordion from "@/components/shared/Accordion.vue";
+
 export default {
   name: "JobFiltersSidebar",
   components: { ActionButton, Accordion },
+  data() {
+    return {
+      selectedOrganizations: [],
+    };
+  },
+  computed: {
+    ...mapGetters(["UNIQUE_ORGANIZATIONS"]),
+  },
+  methods: {
+    ...mapMutations(["ADD_SELECTED_ORGANIZATIONS"]),
+    selectOrganizations() {
+      this.ADD_SELECTED_ORGANIZATIONS(this.selectedOrganizations);
+    },
+  },
 };
 </script>

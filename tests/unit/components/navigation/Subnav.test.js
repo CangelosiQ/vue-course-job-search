@@ -3,9 +3,12 @@ import { mount } from "@vue/test-utils";
 import Subnav from "@/components/navigation/Subnav.vue";
 
 describe("Subnav", () => {
-  const createConfig = (routeName) => ({
+  const createConfig = (routeName, $store = {}) => ({
     global: {
-      mocks: { $route: { name: routeName } },
+      mocks: {
+        $route: { name: routeName },
+        $store,
+      },
       stubs: {
         FontAwesomeIcon: true,
       },
@@ -15,9 +18,14 @@ describe("Subnav", () => {
   describe("when user is on job page", () => {
     it("displays job count", () => {
       const routeName = "jobs";
-      const wrapper = mount(Subnav, createConfig(routeName));
+      const $store = {
+        getters: {
+          FILTERED_JOBS: [{ id: 1 }, { id: 2 }],
+        },
+      };
+      const wrapper = mount(Subnav, createConfig(routeName, $store));
       const jobCount = wrapper.find("[data-test='job-count']");
-      expect(jobCount.exists()).toBe(true);
+      expect(jobCount.text()).toEqual("2 jobs matched");
     });
   });
   describe("when user is NOT on job page", () => {

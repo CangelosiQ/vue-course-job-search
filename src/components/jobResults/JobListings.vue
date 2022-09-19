@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import JobListing from "@/components/jobResults/JobListing.vue";
 import { FETCH_JOBS } from "@/store";
 
@@ -53,16 +53,16 @@ export default {
     },
     nextPage() {
       const nextPage = this.currentPage + 1;
-      const lastPage = Math.ceil(this.jobs.length / 10);
+      const lastPage = Math.ceil(this.FILTERED_JOBS.length / 10);
       return nextPage > lastPage ? undefined : nextPage;
     },
     displayedJobs() {
-      return this.jobs.slice(
+      return this.FILTERED_JOBS.slice(
         (this.currentPage - 1) * 10,
         this.currentPage * 10
       );
     },
-    ...mapState(["jobs"]),
+    ...mapGetters(["FILTERED_JOBS"]),
   },
   async mounted() {
     this.FETCH_JOBS();
