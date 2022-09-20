@@ -10,7 +10,30 @@
         </div>
       </div>
       <accordion header="Degree" />
-      <accordion header="Job Types">Not yet implemented.</accordion>
+      <accordion header="Job Types">
+        <div class="mt-5">
+          <fieldset>
+            <ul class="flex flex-row flex-wrap">
+              <li
+                v-for="jobType in UNIQUE_JOB_TYPES"
+                :key="jobType"
+                class="w-1/2 h-8"
+              >
+                <input
+                  :id="jobType"
+                  v-model="selectedJobTypes"
+                  :value="jobType"
+                  type="checkbox"
+                  class="m-3"
+                  :data-test="jobType"
+                  @change="selectJobTypes"
+                />
+                <label :for="jobType" data-test="jobType">{{ jobType }}</label>
+              </li>
+            </ul>
+          </fieldset>
+        </div>
+      </accordion>
       <accordion header="Organizations" data-test="accordion-organizations">
         <div class="mt-5">
           <fieldset>
@@ -52,15 +75,21 @@ export default {
   data() {
     return {
       selectedOrganizations: [],
+      selectedJobTypes: [],
     };
   },
   computed: {
-    ...mapGetters(["UNIQUE_ORGANIZATIONS"]),
+    ...mapGetters(["UNIQUE_ORGANIZATIONS", "UNIQUE_JOB_TYPES"]),
   },
   methods: {
-    ...mapMutations(["ADD_SELECTED_ORGANIZATIONS"]),
+    ...mapMutations(["ADD_SELECTED_ORGANIZATIONS", "ADD_SELECTED_JOB_TYPES"]),
     selectOrganizations() {
       this.ADD_SELECTED_ORGANIZATIONS(this.selectedOrganizations);
+      this.$router.push({ name: "jobs" });
+    },
+    selectJobTypes() {
+      this.ADD_SELECTED_JOB_TYPES(this.selectedJobTypes);
+      this.$router.push({ name: "jobs" });
     },
   },
 };

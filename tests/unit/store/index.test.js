@@ -99,6 +99,7 @@ describe("getters", () => {
           { organization: "Google" },
         ],
         selectedOrganizations: ["Google"],
+        selectedJobTypes: [],
       };
       const result = getters.FILTERED_JOBS(state);
       expect(result).toEqual([
@@ -116,6 +117,7 @@ describe("getters", () => {
             { organization: "Google" },
           ],
           selectedOrganizations: [],
+          selectedJobTypes: [],
         };
         const result = getters.FILTERED_JOBS(state);
         expect(result).toEqual(state.jobs);

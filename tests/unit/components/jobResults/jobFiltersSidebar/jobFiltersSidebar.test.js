@@ -7,6 +7,9 @@ describe("JobFilterSidebar", () => {
     global: {
       mocks: {
         $store: { ...storeParams },
+        $router: {
+          push: jest.fn(),
+        },
       },
       stubs: {
         FontAwesomeIcon: true,
@@ -26,7 +29,9 @@ describe("JobFilterSidebar", () => {
     const organizationAccordion = wrapper.find(
       "[data-test='accordion-organizations']"
     );
-    const clickableArea = organizationAccordion.find("[data-test='clickable-area']");
+    const clickableArea = organizationAccordion.find(
+      "[data-test='clickable-area']"
+    );
     await clickableArea.trigger("click");
     const organizationLabels = wrapper.findAll("[data-test='organization']");
     const organizations = organizationLabels.map((node) => node.text());
@@ -38,6 +43,7 @@ describe("JobFilterSidebar", () => {
     const storeConfig = {
       state: {
         selectedOrganizations: [],
+        selectedJobTypes: [],
       },
       commit: mock,
     };
