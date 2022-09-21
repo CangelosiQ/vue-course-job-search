@@ -6,7 +6,7 @@
       @click="open"
     >
       <h3 class="text-base font-semibold">{{ header }}</h3>
-      <font-awesome-icon :icon="carrotIcon" />
+      <font-awesome-icon :icon="caretIcon" />
     </div>
     <div v-if="isOpen" class="w-full mt-5">
       <slot><p>Oups, somebody forgot to populate me.</p></slot>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { ref, computed } from "vue";
 export default {
   name: "Accordion",
   props: {
@@ -23,20 +24,15 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      isOpen: false,
+  setup() {
+    const isOpen = ref(false);
+    const open = () => {
+      isOpen.value = !isOpen.value;
     };
-  },
-  computed: {
-    carrotIcon() {
-      return this.isOpen ? ["fas", "angle-up"] : ["fas", "angle-down"];
-    },
-  },
-  methods: {
-    open() {
-      this.isOpen = !this.isOpen;
-    },
+    const caretIcon = computed(() => {
+      return isOpen.value ? ["fas", "angle-up"] : ["fas", "angle-down"];
+    });
+    return { open, isOpen, caretIcon };
   },
 };
 </script>
