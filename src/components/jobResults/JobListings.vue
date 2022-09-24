@@ -34,41 +34,47 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 import JobListing from "@/components/jobResults/JobListing.vue";
 import { FETCH_JOBS } from "@/store";
-
+import { useFilteredJobs } from "@/store/composables";
 export default {
   name: "JobListings",
   components: { JobListing },
-  computed: {
-    currentPage() {
-      const pageString = this.$route.query.page || "1";
-      return Number.parseInt(pageString);
-    },
-    previousPage() {
-      const previousPage = this.currentPage - 1;
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const fetchJobs = () => store.dispatch(FETCH_JOBS);
+    const currentPage = computed(() =>
+      Number.parseInt(route.query.page || "1")
+    );
+    const previousPage = computed(() => {
+      const previousPage = currentPage.value - 1;
       const firstPage = 1;
       return previousPage >= firstPage ? previousPage : undefined;
-    },
-    nextPage() {
-      const nextPage = this.currentPage + 1;
-      const lastPage = Math.ceil(this.FILTERED_JOBS.length / 10);
-      return nextPage > lastPage ? undefined : nextPage;
-    },
-    displayedJobs() {
-      return this.FILTERED_JOBS.slice(
-        (this.currentPage - 1) * 10,
-        this.currentPage * 10
+    });
+    const FILTERED_JOBS = useFilteredJobs();
+    const nextPage = computed(() => {
+      const _nextPage = currentPage.value + 1;
+      const lastPage = Math.ceil(FILTERED_JOBS.value.length / 10);
+      return _nextPage > lastPage ? undefined : _nextPage;
+    });
+    const displayedJobs = computed(() => {
+      return FILTERED_JOBS.value.slice(
+        (currentPage.value - 1) * 10,
+        currentPage.value * 10
       );
-    },
-    ...mapGetters(["FILTERED_JOBS"]),
-  },
-  async mounted() {
-    this.FETCH_JOBS();
-  },
-  methods: {
-    ...mapActions([FETCH_JOBS]),
+    });
+    onMounted(fetchJobs);
+    return {
+      FILTERED_JOBS,
+      previousPage,
+      nextPage,
+      currentPage,
+      displayedJobs,
+    };
   },
 };
 </script>

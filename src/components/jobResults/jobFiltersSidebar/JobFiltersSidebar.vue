@@ -10,87 +10,35 @@
         </div>
       </div>
       <accordion header="Degree" />
-      <accordion header="Job Types">
-        <div class="mt-5">
-          <fieldset>
-            <ul class="flex flex-row flex-wrap">
-              <li
-                v-for="jobType in UNIQUE_JOB_TYPES"
-                :key="jobType"
-                class="w-1/2 h-8"
-              >
-                <input
-                  :id="jobType"
-                  v-model="selectedJobTypes"
-                  :value="jobType"
-                  type="checkbox"
-                  class="m-3"
-                  :data-test="jobType"
-                  @change="selectJobTypes"
-                />
-                <label :for="jobType" data-test="jobType">{{ jobType }}</label>
-              </li>
-            </ul>
-          </fieldset>
-        </div>
-      </accordion>
-      <accordion header="Organizations" data-test="accordion-organizations">
-        <div class="mt-5">
-          <fieldset>
-            <ul class="flex flex-row flex-wrap">
-              <li
-                v-for="organization in UNIQUE_ORGANIZATIONS"
-                :key="organization"
-                class="w-1/2 h-8"
-              >
-                <input
-                  :id="organization"
-                  v-model="selectedOrganizations"
-                  :value="organization"
-                  type="checkbox"
-                  class="m-3"
-                  :data-test="organization"
-                  @change="selectOrganizations"
-                />
-                <label :for="organization" data-test="organization">{{
-                  organization
-                }}</label>
-              </li>
-            </ul>
-          </fieldset>
-        </div>
-      </accordion>
+      <job-filters-sidebar-checkbox-group
+        header="Job Types"
+        :unique-values="UNIQUE_JOB_TYPES"
+        mutation="ADD_SELECTED_JOB_TYPES"
+      />
+      <job-filters-sidebar-checkbox-group
+        header="Organizations"
+        :unique-values="UNIQUE_ORGANIZATIONS"
+        mutation="ADD_SELECTED_ORGANIZATIONS"
+      />
     </section>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
 import ActionButton from "@/components/shared/ActionButton.vue";
 import Accordion from "@/components/shared/Accordion.vue";
-
+import { useUniqueJobTypes, useUniqueOrganizations } from "@/store/composables";
+import JobFiltersSidebarCheckboxGroup from "@/components/jobResults/jobFiltersSidebar/JobFiltersSidebarCheckboxGroup.vue";
 export default {
   name: "JobFiltersSidebar",
-  components: { ActionButton, Accordion },
-  data() {
+  components: { ActionButton, Accordion, JobFiltersSidebarCheckboxGroup },
+  setup() {
+    const UNIQUE_JOB_TYPES = useUniqueJobTypes();
+    const UNIQUE_ORGANIZATIONS = useUniqueOrganizations();
     return {
-      selectedOrganizations: [],
-      selectedJobTypes: [],
+      UNIQUE_ORGANIZATIONS,
+      UNIQUE_JOB_TYPES,
     };
-  },
-  computed: {
-    ...mapGetters(["UNIQUE_ORGANIZATIONS", "UNIQUE_JOB_TYPES"]),
-  },
-  methods: {
-    ...mapMutations(["ADD_SELECTED_ORGANIZATIONS", "ADD_SELECTED_JOB_TYPES"]),
-    selectOrganizations() {
-      this.ADD_SELECTED_ORGANIZATIONS(this.selectedOrganizations);
-      this.$router.push({ name: "jobs" });
-    },
-    selectJobTypes() {
-      this.ADD_SELECTED_JOB_TYPES(this.selectedJobTypes);
-      this.$router.push({ name: "jobs" });
-    },
   },
 };
 </script>
